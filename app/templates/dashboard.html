@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Welcome, {{ current_user.username }}!</h2>
+
+  <!-- Use 'main.add_course' instead of 'add_course' -->
+  <a href="{{ url_for('main.add_course') }}" class="btn btn-success mb-3">Add New Course</a>
+
+  <h3>Available Courses</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Course Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+        <tr>
+          <td>{{ course.name }}</td>
+          <td>{{ course.description }}</td>
+          <td>
+            {% if course in current_user.courses %}
+              <!-- Use 'main.drop_course' instead of 'drop_course' -->
+              <form action="{{ url_for('main.drop_course', course_id=course.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Drop</button>
+              </form>
+            {% else %}
+              <!-- Use 'main.enroll_course' instead of 'enroll_course' -->
+              <form action="{{ url_for('main.enroll_course', course_id=course.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-primary btn-sm">Enroll</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
